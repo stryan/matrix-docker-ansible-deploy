@@ -12,7 +12,7 @@ Wants={{ service }}
 [Service]
 Type=simple
 ExecStartPre=-/usr/bin/docker kill matrix-mautrix-facebook
-ExecStartPre=-/usr/bin/docker rm matrix-mautrix-facebook
+ExecStartPre=-/usr/bin/docker rm matrix-mautrix
 ExecStartPre=/usr/bin/docker run --rm --name matrix-mautrix-facebook-db \
 			--log-driver=none \
 			--user={{ matrix_user_uid }}:{{ matrix_user_gid }} \
