@@ -2,6 +2,9 @@
 
 - include_tasks: "{{ role_path }}/tasks/server_base/setup_centos.yml"
   when: ansible_distribution == 'CentOS'
+  
+- include_tasks: "{{ role_path }}/tasks/server_base/setup_opensuse.yml"
+  when: ansible_os_family == 'Suse'
 
 - include_tasks: "{{ role_path }}/tasks/server_base/setup_debian.yml"
   when: (ansible_os_family == 'Debian') and (ansible_lsb.id != 'Raspbian') 
@@ -23,3 +26,4 @@
     name: "{{ 'ntpd' if ansible_os_family == 'RedHat' or ansible_distribution == 'Archlinux' else 'ntp' }}"
     state: started
     enabled: yes
+  when: ansible_os_family != 'Suse'
