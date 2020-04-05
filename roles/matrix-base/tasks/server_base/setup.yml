@@ -26,4 +26,3 @@
     name: "{{ matrix_ntpd_service }}"
     state: started
     enabled: yes
-  when: ansible_os_family != 'Suse'
