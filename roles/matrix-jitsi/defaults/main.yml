@@ -127,7 +127,6 @@ matrix_jitsi_prosody_systemd_required_services_list: ['docker.service']
 
 
 matrix_jitsi_jicofo_docker_image: "jitsi/jicofo:{{ matrix_jitsi_container_image_tag }}"
->>>>>>> ddeefa5f79fbacb9d14a6aef93414ac4d53b3493
 matrix_jitsi_jicofo_docker_image_force_pull: "{{ matrix_jitsi_jicofo_docker_image.endswith(':latest') }}"
 
 matrix_jitsi_jicofo_base_path: "{{ matrix_base_data_path }}/jitsi/jicofo"
