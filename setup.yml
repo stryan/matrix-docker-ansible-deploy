@@ -23,8 +23,9 @@
     - matrix-bridge-mx-puppet-twitter
     - matrix-bridge-mx-puppet-instagram
     - matrix-bridge-sms
+    - matrix-bot-matrix-reminder-bot
     - matrix-synapse
-    - matrix-riot-web
+    - matrix-client-element
     - matrix-jitsi
     - matrix-ma1sd
     - matrix-dimension
