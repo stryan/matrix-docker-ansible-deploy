@@ -1,3 +1,34 @@
+# 2021-01-08
+
+## (Breaking Change) New SSL configuration
+
+SSL configuration (protocols, ciphers) can now be more easily controlled thanks to us making use of configuration presets.
+
+We define a few presets (old, intermediate, modern), following the [Mozilla SSL Configuration Generator](https://ssl-config.mozilla.org/#server=nginx).
+
+A new variable `matrix_nginx_proxy_ssl_preset` controls which preset is used (defaults to `"intermediate"`).
+
+Compared to before, this changes nginx's `ssl_prefer_server_ciphers` to `off`  (used to default to `on`). It also add some more ciphers to the list, giving better performance on mobile devices, and removes some weak ciphers. More information in the [documentation](docs/configuring-playbook-nginx.md).
+
+To revert to the old behaviour, set the following variables:
+
+```yaml
+matrix_nginx_proxy_ssl_ciphers: "EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH"
+matrix_nginx_proxy_ssl_prefer_server_ciphers: "on"
+```
+
+Just like before, you can still use your own custom protocols by specifying them in `matrix_nginx_proxy_ssl_protocols`. Doing so overrides the values coming from the preset.
+
+
+# 2021-01-03
+
+## Signal bridging support via mautrix-signal
+
+Thanks to [laszabine](https://github.com/laszabine)'s efforts, the playbook now supports bridging to [Signal](https://www.signal.org/) via the [mautrix-signal](https://github.com/tulir/mautrix-signal) bridge. See our [Setting up Mautrix Signal bridging](docs/configuring-playbook-bridge-mautrix-signal.md) documentation page for getting started.
+
+If you had installed the mautrix-signal bridge while its Pull Request was still work-in-progress, you can migrate your data to the new and final setup by referring to [this comment](https://github.com/spantaleev/matrix-docker-ansible-deploy/pull/686#issuecomment-753510789).
+
+
 # 2020-12-23
 
 ## The big move to all-on-Postgres (potentially dangerous)
@@ -38,7 +69,6 @@ If you went with the Postgres migration and it went badly for you (some bridge n
 - switch the affected service back to SQLite (e.g. `matrix_mautrix_facebook_database_engine: sqlite`). Some services (like `appservice-irc` and `appservice-slack`) don't use SQLite, so use `nedb`, instead of `sqlite` for them.
 - re-run the playbook (`ansible-playbook -i inventory/hosts setup.yml --tags=setup-all,start`)
 - [get in touch](README.md#support) with us
-
 
 # 2020-12-11
 
