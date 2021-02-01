@@ -4,9 +4,16 @@
 
 ## Purpose
 
-This Ansible playbook is meant to easily let you run your own [Matrix](http://matrix.org/) homeserver.
+This [Ansible](https://www.ansible.com/) playbook is meant to help you run your own [Matrix](http://matrix.org/) homeserver, along with the [various services](#supported-services) related to that.
 
-That is, it lets you join the Matrix network with your own `@<username>:<your-domain>` identifier, all hosted on your own server.
+That is, it lets you join the Matrix network using your own `@<username>:<your-domain>` identifier, all hosted on your own server (see [prerequisites](docs/prerequisites.md)).
+
+We run all services in [Docker](https://www.docker.com/) containers (see [the container images we use](docs/container-images.md)), which lets us have a predictable and up-to-date setup, across multiple supported distros (see [prerequisites](docs/prerequisites.md)) and [architectures](docs/alternative-architectures.md) (x86/amd64 being recommended).
+
+[Installation](docs/README.md) (upgrades) and some maintenance tasks are automated using [Ansible](https://www.ansible.com/) (see [our Ansible guide](docs/ansible.md)).
+
+
+## Supported services
 
 Using this playbook, you can get the following services configured on your server:
 
@@ -56,6 +63,12 @@ Using this playbook, you can get the following services configured on your serve
 
 - (optional) the [matrix-appservice-webhooks](https://github.com/turt2live/matrix-appservice-webhooks) bridge for slack compatible webhooks ([ConcourseCI](https://concourse-ci.org/), [Slack](https://slack.com/) etc. pp.)
 
+- (optional) the [matrix-sms-bridge](https://github.com/benkuly/matrix-sms-bridge) for bridging your Matrix server to SMS - see [docs/configuring-playbook-bridge-matrix-bridge-sms.md](docs/configuring-playbook-bridge-matrix-bridge-sms.md) for setup documentation
+
+- (optional) the [mx-puppet-skype](https://hub.docker.com/r/sorunome/mx-puppet-skype) for bridging your Matrix server to [Skype](https://www.skype.com) - see [docs/configuring-playbook-bridge-mx-puppet-skype.md](docs/configuring-playbook-bridge-mx-puppet-skype.md) for setup documentation
+
+- (optional) the [mx-puppet-slack](https://hub.docker.com/r/sorunome/mx-puppet-skype) for bridging your Matrix server to [Slack](https://slack.com) - see [docs/configuring-playbook-bridge-mx-puppet-slack.md](docs/configuring-playbook-bridge-mx-puppet-slack.md) for setup documentation
+
 - (optional) the [mx-puppet-instagram](https://github.com/Sorunome/mx-puppet-instagram) bridge for Instagram-DMs ([Instagram](https://www.instagram.com/)) - see [docs/configuring-playbook-bridge-mx-puppet-instagram.md](docs/configuring-playbook-bridge-mx-puppet-instagram.md) for setup documentation
 
 - (optional) the [mx-puppet-twitter](https://github.com/Sorunome/mx-puppet-twitter) bridge for Twitter-DMs ([Twitter](https://twitter.com/) - see [docs/configuring-playbook-bridge-mx-puppet-twitter.md](docs/configuring-playbook-bridge-mx-puppet-twitter.md) for setup documentation
@@ -64,11 +77,11 @@ Using this playbook, you can get the following services configured on your serve
 
 - (optional) the [mx-puppet-steam](https://github.com/icewind1991/mx-puppet-steam) bridge for [Steam](https://steamapp.com/)) - see [docs/configuring-playbook-bridge-mx-puppet-steam.md](docs/configuring-playbook-bridge-mx-puppet-steam.md) for setup documentation
 
-- (optional) the [matrix-sms-bridge](https://github.com/benkuly/matrix-sms-bridge) for bridging your Matrix server to SMS - see [docs/configuring-playbook-bridge-matrix-bridge-sms.md](docs/configuring-playbook-bridge-matrix-bridge-sms.md) for setup documentation
-
 - (optional) [Email2Matrix](https://github.com/devture/email2matrix) for relaying email messages to Matrix rooms - see [docs/configuring-playbook-email2matrix.md](docs/configuring-playbook-email2matrix.md) for setup documentation
 
 - (optional) [Dimension](https://github.com/turt2live/matrix-dimension), an open source integrations manager for matrix clients - see [docs/configuring-playbook-dimension.md](docs/configuring-playbook-dimension.md) for setup documentation
+
+- (optional) [Etherpad](https://etherpad.org), an open source collaborative text editor - see [docs/configuring-playbook-etherpad.md](docs/configuring-playbook-etherpad.md) for setup documentation
 
 - (optional) [Jitsi](https://jitsi.org/), an open source video-conferencing platform - see [docs/configuring-playbook-jitsi.md](docs/configuring-playbook-jitsi.md) for setup documentation
 
@@ -85,33 +98,6 @@ Sticking with the defaults (which install a subset of the above components) is t
 You can always re-run the playbook later to add or remove components.
 
 
-## What's different about this Ansible playbook?
-
-This is similar to the [EMnify/matrix-synapse-auto-deploy](https://github.com/EMnify/matrix-synapse-auto-deploy) Ansible deployment, but:
-
-- this one is a complete Ansible playbook (instead of just a role), so it's **easier to run** - especially for folks not familiar with Ansible
-
-- this one installs and hooks together **a lot more Matrix-related services** for you (see above)
-
-- this one **can be executed more than once** without causing trouble
-
-- works on various distros: **CentOS** (7.0+), Debian-based distributions (**Debian** 9/Stretch+, **Ubuntu** 16.04+), **Archlinux**
-
-- this one installs everything in a single directory (`/matrix` by default) and **doesn't "contaminate" your server** with files all over the place
-
-- this one **doesn't necessarily take over** ports 80 and 443. By default, it sets up nginx for you there, but you can also [use your own webserver](docs/configuring-playbook-own-webserver.md)
-
-- this one **runs everything in Docker containers**, so it's likely more predictable and less fragile (see [Docker images used by this playbook](#docker-images-used-by-this-playbook))
-
-- this one retrieves and automatically renews free [Let's Encrypt](https://letsencrypt.org/) **SSL certificates** for you
-
-- this one optionally can store the `media_store` content repository files on [Amazon S3](https://aws.amazon.com/s3/) (but defaults to storing files on the server's filesystem)
-
-- this one optionally **allows you to use an external PostgreSQL server** for Synapse's database (but defaults to running one in a container)
-
-- helps you **import data from a previous installation** (so you can migrate your manual virtualenv/Docker setup to a more managed one)
-
-
 ## Installation
 
 To configure and install Matrix on your own server, follow the [README in the docs/ directory](docs/README.md).
@@ -124,6 +110,7 @@ This playbook evolves over time, sometimes with backward-incompatible changes.
 When updating the playbook, refer to [the changelog](CHANGELOG.md) to catch up with what's new.
 
 
+<<<<<<< HEAD
 ## Docker images used by this playbook
 
 This playbook sets up your server using the following Docker images:
@@ -182,11 +169,8 @@ This playbook sets up your server using the following Docker images:
 
 - [sorunome/mx-puppet-discord](https://hub.docker.com/r/sorunome/mx-puppet-discord) - the [mx-puppet-discord](https://github.com/matrix-discord/mx-puppet-discord) bridge to [Discord](https://discordapp.com) (optional)
 
-<<<<<<< HEAD
-=======
 - [icewind1991/mx-puppet-steam](https://hub.docker.com/r/icewind1991/mx-puppet-steam) - the [mx-puppet-steam](https://github.com/icewind1991/mx-puppet-steam) bridge to [Steam](https://steampowered.com) (optional)
 
->>>>>>> ddeefa5f79fbacb9d14a6aef93414ac4d53b3493
 - [turt2live/matrix-dimension](https://hub.docker.com/r/turt2live/matrix-dimension) - the [Dimension](https://dimension.t2bot.io/) integrations manager (optional)
 
 - [jitsi/web](https://hub.docker.com/r/jitsi/web) - the [Jitsi](https://jitsi.org/) web UI (optional)
@@ -207,7 +191,6 @@ This playbook sets up your server using the following Docker images:
 This Ansible playbook can be improved in the following ways:
 
 - setting up automatic backups to one or more storage providers
-
 
 ## Support
 
